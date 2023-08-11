@@ -1,0 +1,325 @@
+definitions:
+  models.Comment:
+    properties:
+      body:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      postId:
+        type: integer
+      userId:
+        type: integer
+    type: object
+  models.LoginInput:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  models.Post:
+    properties:
+      body:
+        type: string
+      id:
+        type: integer
+      title:
+        type: string
+      userId:
+        type: integer
+    type: object
+  models.TokenResponse:
+    properties:
+      token:
+        type: string
+    type: object
+  models.User:
+    properties:
+      email:
+        type: string
+      id:
+        type: integer
+      password:
+        example: password123
+        type: string
+      username:
+        example: john_doe
+        type: string
+    required:
+    - password
+    - username
+    type: object
+info:
+  contact: {}
+paths:
+  /api/comments:
+    post:
+      consumes:
+      - application/json
+      description: Create a new comment with the given data
+      parameters:
+      - description: your_token_here
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Comment data
+        in: body
+        name: comment
+        required: true
+        schema:
+          $ref: '#/definitions/models.Comment'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Comment'
+      security:
+      - ApiKeyAuth: []
+      summary: Create a new comment
+      tags:
+      - Comments
+  /api/posts:
+    post:
+      consumes:
+      - application/json
+      description: Create a new post with the given data
+      parameters:
+      - description: your_token_here
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Post data
+        in: body
+        name: post
+        required: true
+        schema:
+          $ref: '#/definitions/models.Post'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Post'
+      security:
+      - ApiKeyAuth: []
+      summary: Create a new post
+      tags:
+      - Posts
+  /comments:
+    get:
+      consumes:
+      - application/json
+      description: Get all comments
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Comment'
+            type: array
+      summary: Get all comments
+      tags:
+      - Comments
+  /comments/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a comment with the given ID
+      parameters:
+      - description: Comment ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+      summary: Delete a comment by ID
+      tags:
+      - Comments
+    get:
+      consumes:
+      - application/json
+      description: Get a comment by its unique ID
+      parameters:
+      - description: Comment ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Comment'
+      summary: Get a comment by ID
+      tags:
+      - Comments
+    put:
+      consumes:
+      - application/json
+      description: Update a comment with the given ID and data
+      parameters:
+      - description: Comment ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Updated comment data
+        in: body
+        name: comment
+        required: true
+        schema:
+          $ref: '#/definitions/models.Comment'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Comment'
+      summary: Update a comment by ID
+      tags:
+      - Comments
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Log in using the provided username and password
+      parameters:
+      - description: Login data
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.LoginInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.TokenResponse'
+      summary: Log in as a user
+      tags:
+      - Authentication
+  /posts:
+    get:
+      consumes:
+      - application/json
+      description: Get all posts
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Post'
+            type: array
+      summary: Get all posts
+      tags:
+      - Posts
+  /posts/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a post with the given ID
+      parameters:
+      - description: Post ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+      summary: Delete a post by ID
+      tags:
+      - Posts
+    get:
+      consumes:
+      - application/json
+      description: Get a post by its unique ID
+      parameters:
+      - description: Post ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Post'
+      summary: Get a post by ID
+      tags:
+      - Posts
+    put:
+      consumes:
+      - application/json
+      description: Update a post with the given ID and data
+      parameters:
+      - description: Post ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Updated post data
+        in: body
+        name: post
+        required: true
+        schema:
+          $ref: '#/definitions/models.Post'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Post'
+      summary: Update a post by ID
+      tags:
+      - Posts
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: Register a new user with the provided data
+      parameters:
+      - description: User data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+      summary: Register a new user
+      tags:
+      - Authentication
+swagger: "2.0"
